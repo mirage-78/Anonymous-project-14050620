@@ -8,6 +8,9 @@
     "build": "cross-env NODE_ENV=production node ./start.js --enable-turbo-mode",
     "postinstall": "prisma skills sync || exit 0"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mirage-78/Anonymous-project.git"
@@ -21,7 +24,7 @@
   },
   "homepage": "https://github.com/mirage-78/Anonymous-project#readme",
   "dependencies": {
-    "@prisma/client": "^7.10.0",
+    "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
     "compression": "^1.8.1",
     "connect-flash": "^0.1.1",
@@ -39,13 +42,13 @@
     "joi": "^18.2.5",
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.23.4",
-    "prisma": "^8.0.0-rc.13",
     "winston": "^3.19.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^10.6.0",
     "husky": "^9.1.7",
     "knex": "^3.3.0",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "prisma": "^6.19.3"
   }
 }
