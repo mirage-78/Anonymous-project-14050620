@@ -35,5 +35,18 @@ module.exports = {
     JWT: {
         secret: process.env.JWT_SECRET,
         expiresIn: process.env.JWT_EXPIRE || '7d'
-    }
+    },
+
+    // SMS MELIPAYAMAK
+    SMS: {
+        username: process.env.MELIPAYAMAK_USERNAME,
+        password: process.env.MELIPAYAMAK_PASSWORD,
+        from: process.env.MELIPAYAMAK_FROM
+    },
+    // REDIS
+    REDIS: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT || 6379,
+        password: process.env.REDIS_PASSWORD,
+    },
 };

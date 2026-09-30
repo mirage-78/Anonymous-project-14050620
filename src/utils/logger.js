@@ -1,6 +1,7 @@
 
 const winston = require('winston');
 const path = require('path');
+const stringify = require('safe-stable-stringify');
 
 // Define log levels
 const levels = {
@@ -38,7 +39,7 @@ const format = winston.format.combine(
     winston.format.printf(({ timestamp, level, message, ...meta }) => {
         let log = `${timestamp} [${level.toUpperCase()}]: ${message}`;
         if (Object.keys(meta).length > 0) {
-            log += ` ${JSON.stringify(meta)}`;
+            log += ` ${stringify(meta)}`;
         }
         return log;
     })

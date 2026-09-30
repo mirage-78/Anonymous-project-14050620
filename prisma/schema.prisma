@@ -9,17 +9,79 @@ datasource db {
 
 // مدل کاربران
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  phone     String?
-  password  String   // رمز عبور هش شده
-  role      Role     @default(CUSTOMER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int       @id @default(autoincrement())
   
-  cart      Cart?
-  orders    Order[]
+  // فیلدهای اجباری
+  name          String
+  phone         String    @unique
+  
+  // فیلدهای اختیاری
+  email         String?   @unique
+  password      String?
+  nationalCode  String?   @unique  @db.VarChar(10)
+  avatar        String?
+  birthDate     DateTime?
+  gender        Gender?
+  
+  // وضعیت و نقش
+  role          Role      @default(CUSTOMER)
+  isActive      Boolean   @default(true)
+  isVerified    Boolean   @default(false)
+  lastLoginAt   DateTime?
+  
+  // زمان‌ها
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // روابط
+  addresses     Address[]
+  cart          Cart?
+  orders        Order[]
+}
+
+
+// مدل آدرس‌ها (جدید)
+model Address {
+  id            Int       @id @default(autoincrement())
+  
+  userId        Int
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // عنوان آدرس (مثلاً "خانه"، "محل کار")
+  title         String    @default("خانه")
+  
+  // اطلاعات گیرنده
+  receiverName  String
+  receiverPhone String
+  
+  // موقعیت مکانی
+  province      String
+  city          String
+  postalCode    String?   @db.VarChar(10)
+  fullAddress   String    @db.Text
+  
+  // مختصات جغرافیایی (اختیاری)
+  latitude      Float?
+  longitude     Float?
+  
+  // پرچم‌ها
+  isDefault     Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  
+  // زمان‌ها
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // ایندکس برای جستجوی سریع‌تر
+  @@index([userId])
+  @@index([userId, isDefault])
+}
+
+// جنسیت
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
 }
 
 // نقش کاربران

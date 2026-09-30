@@ -62,71 +62,73 @@ function generateOtp() {
 }
 
 // ارسال کد
-router.post('/send-otp', async (req, res) => {
-    console.log(req.body)
-    const { phone } = req.body;
-    const code = generateOtp();
+// router.post('/send-otp', async (req, res) => {
+//     console.log(req.body)
+//     const { phone } = req.body;
+//     const code = generateOtp();
 
-    const data = {
-        username: "989360352927",
-        password: "112e26d2-5891-486b-932a-63bf0a167b67",
-        to: phone, 
-        from: "50004001352927",
-        code: code
-    };
+//     const data = {
+//         username: "989360352927",
+//         password: "112e26d2-5891-486b-932a-63bf0a167b67",
+//         to: phone, 
+//         from: "50004001352927",
+//         code: code
+//     };
 
-    const postData = querystring.stringify(data);
+//     const postData = querystring.stringify(data);
 
-    try {
-        const response = await axios.post(
-            'https://rest.payamak-panel.com/api/SendSMS/SendOtp',
-            postData,
-            {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }
-        );
+//     try {
+//         const response = await axios.post(
+//             'https://rest.payamak-panel.com/api/SendSMS/SendOtp',
+//             postData,
+//             {
+//                 headers: {
+//                     'Content-Type': 'application/x-www-form-urlencoded'
+//                 }
+//             }
+//         );
 
-        // ذخیره کد در کش؛ TTL به‌صورت خودکار توسط lru-cache اعمال می‌شود
-        otpCache.set(phone, code);
+//         // ذخیره کد در کش؛ TTL به‌صورت خودکار توسط lru-cache اعمال می‌شود
+//         otpCache.set(phone, code);
 
-        res.json({ success: true, message: 'کد ارسال شد' });
-        console.log('کد ارسالی : ' , code);
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.response ? error.response.data : error.message
-        });
-    }
-});
+//         res.json({ success: true, message: 'کد ارسال شد' });
+//         console.log('کد ارسالی : ' , code);
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             error: error.response ? error.response.data : error.message
+//         });
+//     }
+// });
 
 // تأیید کد
-router.post('/verify-otp', (req, res) => {
-    const { phone, code } = req.body;
+// router.post('/verify-otp', (req, res) => {
+//     const { phone, code } = req.body;
 
-    // اگر کد منقضی شده باشد، get مقدار undefined برمی‌گرداند
-    const storedCode = otpCache.get(phone);
+//     // اگر کد منقضی شده باشد، get مقدار undefined برمی‌گرداند
+//     const storedCode = otpCache.get(phone);
 
-    if (storedCode === undefined) {
-        return res.json({ success: false, message: 'کد منقضی شده یا ارسال نشده است' });
-    }
+//     if (storedCode === undefined) {
+//         return res.json({ success: false, message: 'کد منقضی شده یا ارسال نشده است' });
+//     }
 
-    if (String(storedCode) !== String(code)) {
-        return res.json({ success: false, message: 'کد اشتباه است' });
-    }
+//     if (String(storedCode) !== String(code)) {
+//         return res.json({ success: false, message: 'کد اشتباه است' });
+//     }
 
-    // حذف کد پس از تأیید موفق
-    otpCache.delete(phone);
+//     // حذف کد پس از تأیید موفق
+//     otpCache.delete(phone);
 
-    res.json({ success: true, message: 'تایید شد' });
-});
+//     res.json({ success: true, message: 'تایید شد' });
+// });
 
 
 
 ///////////////////////////////////////
 
 router.use('/users', require('./v1/user.routes'));
+router.use('/auth', require('./v1/auth.routes'));
+
 // router.use('/products', require('./product.routes'));
 // router.use('/orders', require('./order.routes'));
 // router.use('/categories', require('./category.routes'));
